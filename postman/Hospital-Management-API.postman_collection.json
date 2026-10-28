@@ -1,0 +1,455 @@
+{
+  "info": {
+    "_postman_id": "d0c3ce07-4c86-4a60-88da-b1411a0d4b87",
+    "name": "Hospital Management API - CRUD Tests",
+    "description": "End-to-end CRUD requests for doctors, patients, and appointments. Run the collection in order against the running Spring Boot application. Create requests capture IDs for following requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Doctors",
+      "item": [
+        {
+          "name": "Create doctor",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/doctors",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jordan Lee\",\n  \"specialization\": \"Family Medicine\",\n  \"email\": \"jordan.lee@example.com\",\n  \"phone\": \"555-0101\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Doctor created (201)', function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Response uses success envelope', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data.id).to.exist;  });",
+                  "pm.collectionVariables.set('doctorId', body.data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get all doctors",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/doctors"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Doctors listed (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Response contains a data array', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get doctor by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/doctors/{{doctorId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Doctor retrieved (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Returned ID matches', function () { pm.expect(body.success).to.eql(true); pm.expect(String(body.data.id)).to.eql(String(pm.collectionVariables.get('doctorId'))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update doctor",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/doctors/{{doctorId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jordan Lee Updated\",\n  \"specialization\": \"Internal Medicine\",\n  \"email\": \"jordan.lee@example.com\",\n  \"phone\": \"555-0101\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Doctor updated (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Updated doctor data returned', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data.name).to.eql('Jordan Lee Updated'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "Create patient",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/patients",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sam Rivera\",\n  \"dateOfBirth\": \"1990-04-12\",\n  \"email\": \"sam.rivera@example.com\",\n  \"phone\": \"555-0102\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Patient created (201)', function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Response uses success envelope', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data.id).to.exist;  });",
+                  "pm.collectionVariables.set('patientId', body.data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get all patients",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/patients"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Patients listed (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Response contains a data array', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get patient by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/patients/{{patientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Patient retrieved (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Returned ID matches', function () { pm.expect(body.success).to.eql(true); pm.expect(String(body.data.id)).to.eql(String(pm.collectionVariables.get('patientId'))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update patient",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/patients/{{patientId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sam Rivera Updated\",\n  \"dateOfBirth\": \"1990-04-12\",\n  \"email\": \"sam.rivera@example.com\",\n  \"phone\": \"555-0102\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Patient updated (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Updated patient data returned', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data.name).to.eql('Sam Rivera Updated'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "Create appointment",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/appointments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": {{doctorId}},\n  \"patientId\": {{patientId}},\n  \"startAt\": \"2027-01-15T10:00:00\",\n  \"endAt\": \"2027-01-15T10:30:00\",\n  \"notes\": \"Initial consultation\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Appointment created (201)', function () { pm.response.to.have.status(201); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Response uses success envelope', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data.id).to.exist; pm.expect(body.data.status).to.eql('SCHEDULED'); });",
+                  "pm.collectionVariables.set('appointmentId', body.data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get all appointments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/appointments"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Appointments listed (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Response contains a data array', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data).to.be.an('array'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get appointment by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/appointments/{{appointmentId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Appointment retrieved (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Returned ID matches', function () { pm.expect(body.success).to.eql(true); pm.expect(String(body.data.id)).to.eql(String(pm.collectionVariables.get('appointmentId'))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update appointment",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/appointments/{{appointmentId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": {{doctorId}},\n  \"patientId\": {{patientId}},\n  \"startAt\": \"2027-01-15T10:00:00\",\n  \"endAt\": \"2027-01-15T10:30:00\",\n  \"notes\": \"Consultation completed\",\n  \"status\": \"COMPLETED\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Appointment updated (200)', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Updated appointment data returned', function () { pm.expect(body.success).to.eql(true); pm.expect(body.data.status).to.eql('COMPLETED'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete appointment",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/appointments/{{appointmentId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Appointment deleted (200)', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Delete response uses success envelope', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Confirm deleted appointment returns 404",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/appointments/{{appointmentId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Deleted appointment returns 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('Not-found response uses error envelope', function () { const body = pm.response.json(); pm.expect(body.success).to.eql(false); pm.expect(body.message).to.include('Appointment not found'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cleanup",
+      "description": "Delete doctors and patients only after appointment tests use their IDs.",
+      "item": [
+        {
+          "name": "Delete doctor",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/doctors/{{doctorId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Doctor deleted (200)', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Delete response uses success envelope', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Confirm deleted doctor returns 404",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/doctors/{{doctorId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Deleted doctor returns 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('Not-found response uses error envelope', function () { const body = pm.response.json(); pm.expect(body.success).to.eql(false); pm.expect(body.message).to.include('Doctor not found'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete patient",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/patients/{{patientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Patient deleted (200)', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Delete response uses success envelope', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Confirm deleted patient returns 404",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/patients/{{patientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Deleted patient returns 404', function () { pm.response.to.have.status(404); });",
+                  "pm.test('Not-found response uses error envelope', function () { const body = pm.response.json(); pm.expect(body.success).to.eql(false); pm.expect(body.message).to.include('Patient not found'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
